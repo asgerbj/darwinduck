@@ -9,6 +9,7 @@ if not pygame.mixer: print 'Warning, sound disabled'
 # Colourcodes
 black = ( 0, 0, 0)
 blue  = ( 0, 255, 0)
+red = ( 255, 0 , 0)
 white = ( 255, 255, 255)
 bluewater = ( 25, 155, 225)
 
