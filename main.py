@@ -1,5 +1,5 @@
 # Import modules
-import os, sys
+import os, sys, math
 import pygame
 from pygame.locals import * 
 
@@ -24,7 +24,7 @@ screen = pygame.display.get_surface()
 
 clock = pygame.time.Clock() # Initialize pygame clock
 
-player1 = duck(white,200,300)
+player1 = duck(white,200,600)
 
 allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
 allsprites.add(player1)
@@ -39,9 +39,16 @@ while run == True:
 		if event.type == pygame.KEYDOWN: # Keypresses
 			if event.key == pygame.K_ESCAPE:
 				run = False
+			
+			if event.key == pygame.K_RIGHT:
+				player1.left()
+			if event.key == pygame.K_LEFT:
+				player1.right()
+				
 
 	# Draw graphics
 	screen.fill(bluewater) # Draw background
+	player1.update()
 	allsprites.draw(screen)
 	
 	pygame.display.flip() # Redraw all graphics

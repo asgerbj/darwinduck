@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class duck(pygame.sprite.Sprite):
 	def __init__(self,color,x,y):
@@ -8,3 +9,18 @@ class duck(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
+		self.movementdir = 0
+		self.movementspeed = 0
+
+	def right(self):
+		self.movementspeed += 3
+
+	def left(self):
+		self.movementspeed += 3
+		
+	def update(self):
+		print self.movementspeed
+		print self.movementdir
+		self.rect.y -= self.movementspeed
+		if self.movementspeed > 0:
+			self.movementspeed -= 0.25
