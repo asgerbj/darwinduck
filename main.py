@@ -120,13 +120,14 @@ while run == True:
 	block_list.update()
 	slow_list.update()
 	player_list.update(player_list, block_list, slow_list)
+	player_list.detectsprint(player_list, block_list, slow_list)
 
      
 	allsprites.draw(screen)
 	# block_list.update()
 	
 	pygame.display.flip() # Redraw all graphics
-	clock.tick(30) # Run game at 50 fps
+	clock.tick(30) # Run game at 30 fps
 # - - - END MAIN LOOP - - -
 pygame.quit()
 sys.exit
