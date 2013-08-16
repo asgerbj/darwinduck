@@ -64,6 +64,7 @@ def create_level1(block_list, slow_list, allsprites):
  
  
 # Main program, create the blocks 
+player_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
 slow_list = pygame.sprite.Group()
 allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
@@ -74,8 +75,9 @@ create_level1(block_list, slow_list, allsprites)
 duck1 = duck("duck1", white,200,500)
 duck2 = duck("duck2", white,300,500)
 
-allsprites.add(duck1)
-allsprites.add(duck2)
+player_list.add(duck1)
+player_list.add(duck2)
+allsprites.add(player_list)
 
 run = True
 # - - - BEGIN MAIN LOOP - - -
@@ -89,14 +91,14 @@ while run == True:
 				run = False
 			
 			if event.key == pygame.K_RIGHT:
-				duck1.left()
-			if event.key == pygame.K_LEFT:
 				duck1.right()
+			if event.key == pygame.K_LEFT:
+				duck1.left()
 				
 			if event.key == pygame.K_d:
-				duck2.left()
-			if event.key == pygame.K_a:
 				duck2.right()
+			if event.key == pygame.K_a:
+				duck2.left()
 
 
 
@@ -105,8 +107,7 @@ while run == True:
 
 	block_list.update()
 	slow_list.update()
-	duck1.update(block_list, slow_list)
-	duck2.update(block_list, slow_list)
+	player_list.update(player_list, block_list, slow_list)
 
      
 	allsprites.draw(screen)

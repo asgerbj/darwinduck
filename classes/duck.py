@@ -8,7 +8,7 @@ class duck(pygame.sprite.Sprite):
 		# self.image = pygame.Surface([30, 50])
 		# self.image.fill(color)
                 self.name = name
-                self.image = pygame.image.load(os.path.join("images/duck1/", "N.png"))
+                self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "N.png"))
                 self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
@@ -29,7 +29,7 @@ class duck(pygame.sprite.Sprite):
                 if self.movementdir >= 360:
                    self.movementdir = 0
 
-	def update(self, block_list, slow_list):
+	def update(self, player_list, block_list, slow_list):
                 old_x = self.rect.x
                 old_y = self.rect.y
 
@@ -40,7 +40,7 @@ class duck(pygame.sprite.Sprite):
 
                 slowed = pygame.sprite.spritecollide (self, slow_list, False)
                 for i in slowed:
-                    self.movementspeed -= 0.4 # Controls the slow effect
+                    self.movementspeed = 0.6 # Controls the slow effect
 
 		if self.movementspeed > 0:
                    self.movementspeed =  self.movementspeed * 0.95
@@ -51,25 +51,25 @@ class duck(pygame.sprite.Sprite):
                    self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "N.png"))
                 
                 if self.movementdir == 30 or self.movementdir == 60:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "NW.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "NW.png"))
 
                 if self.movementdir == 90:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "W.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "W.png"))
 
                 if self.movementdir == 120 or self.movementdir == 150:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "SW.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "SW.png"))
 
                 if self.movementdir == 180:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "S.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "S.png"))
 
                 if self.movementdir == 210 or self.movementdir == 240:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "SE.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "SE.png"))
 
                 if self.movementdir == 270:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "E.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "E.png"))
 
                 if self.movementdir == 300 or self.movementdir == 330:
-                   self.image = pygame.image.load(os.path.join("images/duck1/", "NE.png"))
+                   self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "NE.png"))
 
                 collide = pygame.sprite.spritecollide (self, block_list, False)
                 if collide:
@@ -79,6 +79,17 @@ class duck(pygame.sprite.Sprite):
                     self.xpos = old_x
                     self.ypos = old_y
                     self.movementspeed = 0
+
+                
+                pygame.sprite.Sprite.remove(self, player_list)
+                player_collide = pygame.sprite.spritecollide (self, player_list, False)
+                if player_collide:
+                    # We collided, go back to the old pre-collision location
+                    self.rect.x = old_x
+                    self.rect.y = old_y
+                    self.xpos = old_x
+                    self.ypos = old_y
+                player_list.add(self)
 
                 if self.rect.y <= 50:
                    diff = 50 - self.rect.y
