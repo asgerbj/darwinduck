@@ -20,14 +20,28 @@ class duck(pygame.sprite.Sprite):
 	def right(self):
 		self.movementspeed += 1
                 self.movementdir -= 30
-                if self.movementdir <= 0:
-                   self.movementdir = 360
+                if self.movementdir < 0:
+                   self.movementdir = 330
 
 	def left(self):
 		self.movementspeed += 1
                 self.movementdir += 30
-                if self.movementdir >= 360:
-                   self.movementdir = 0
+                if self.movementdir > 360:
+                   self.movementdir = 30
+
+	def detectsprint(self, player_list, block_list, slow_list):
+        if self.rect.y <= 50:
+            diff = 50 - self.rect.y
+            self.rect.y = 50
+            self.ypos = 50
+        # player2.rect.y += diff
+        for block in block_list:
+            block.rect.y += 3	
+        for block in slow_list:
+            block.rect.y += 3
+        for player in player_list:
+            player.rect.y += 3
+            player.ypos = player.rect.y
 
 	def update(self, player_list, block_list, slow_list):
                 old_x = self.rect.x
@@ -45,9 +59,7 @@ class duck(pygame.sprite.Sprite):
 		if self.movementspeed > 0:
                    self.movementspeed =  self.movementspeed * 0.95
 
-   # data = [line.strip() for line in open("map%d.txt"%map)]
                 if self.movementdir == 0 or self.movementdir == 360:
-                   # self.image = pygame.image.load(os.path.join("images/duck1/", "N.png"))
                    self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "N.png"))
                 
                 if self.movementdir == 30 or self.movementdir == 60:
@@ -80,27 +92,18 @@ class duck(pygame.sprite.Sprite):
                     self.ypos = old_y
                     self.movementspeed = 0
 
-                
                 pygame.sprite.Sprite.remove(self, player_list)
-                player_collide = pygame.sprite.spritecollide (self, player_list, False)
+                
+                player_collide = pygame.sprite.spritecollide(self, player_list, False)
                 if player_collide:
                     # We collided, go back to the old pre-collision location
                     self.rect.x = old_x
                     self.rect.y = old_y
                     self.xpos = old_x
                     self.ypos = old_y
+                
                 player_list.add(self)
-
-                if self.rect.y <= 50:
-                   diff = 50 - self.rect.y
-                   self.rect.y = 50
-                   self.ypos = 50
-                   # player2.rect.y += diff
-                   for block in block_list:
-                       block.rect.y += 3	
-                   for block in slow_list:
-                       block.rect.y += 3	
-
+                
                 if self.rect.y >= 600 : # screen height
                    # diff = player1.rect.y - 500
                    self.rect.y = 600 - self.rect[3]
@@ -123,3 +126,5 @@ class duck(pygame.sprite.Sprite):
 
                 if self.rect.y > 600:
                    self.kill()
+                   
+                
