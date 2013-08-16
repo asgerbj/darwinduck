@@ -8,3 +8,8 @@ if not pygame.mixer: print 'Warning, sound disabled'
 
 
 
+
+
+
+aklmaslkdmawalwkdmawld
+asdasdlmaskdmla
