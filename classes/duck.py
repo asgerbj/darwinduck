@@ -40,7 +40,7 @@ class duck(pygame.sprite.Sprite):
 
                 slowed = pygame.sprite.spritecollide (self, slow_list, False)
                 for i in slowed:
-                    self.movementspeed = 0.6 # Controls the slow effect
+                    self.movementspeed = self.movementspeed * 0.80 # Controls the slow effect
 
 		if self.movementspeed > 0:
                    self.movementspeed =  self.movementspeed * 0.95

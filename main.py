@@ -40,7 +40,19 @@ clock = pygame.time.Clock() # Initialize pygame clock
 
 # Create platforms
 def create_level1(block_list, slow_list, allsprites):
- 
+   # left siv 
+    for y in range(-1200, 600, 600):
+        block = Platform(blue, 32, 600)
+        block.rect.x = 0
+        block.rect.y = y
+        slow_list.add(block)
+   # right siv
+    for y in range(-1200, 600, 600):
+        block = Platform(blue, 32, 600)
+        block.rect.x = screen_width - 32
+        block.rect.y = y
+        slow_list.add(block)
+
     for x in range(-600, 1500, 200):
         block = Platform(white, 100, 20)
         block.rect.x = x
