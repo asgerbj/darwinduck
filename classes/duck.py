@@ -18,6 +18,11 @@ class duck(pygame.sprite.Sprite):
 		# Load sounds
 		self.sound_stone_hit = pygame.mixer.Sound(os.path.join('sound', 'stone_hit.wav'))
 		self.sound_stone_hit.set_volume(volume)
+		self.sound_duck1 = pygame.mixer.Sound(os.path.join('sound', 'duck_sound1.wav'))
+		self.sound_duck1.set_volume(volume)
+		self.sound_duck2 = pygame.mixer.Sound(os.path.join('sound', 'duck_sound2.wav'))
+		self.sound_duck2.set_volume(volume)
+		
 
 	def right(self):
 		self.movementspeed += 1

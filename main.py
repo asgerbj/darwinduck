@@ -90,7 +90,7 @@ allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
  
 create_level1(block_list, slow_list, allsprites)
 
-duck1 = duck("greenhead", volume,200,500)
+duck1 = duck("rubberduck", volume,200,500)
 duck2 = duck("redhead", volume,300,500)
 
 player_list.add(duck1)
