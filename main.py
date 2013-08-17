@@ -11,7 +11,8 @@ black = ( 0, 0, 0)
 blue  = ( 0, 255, 0)
 red = ( 255, 0 , 0)
 white = ( 255, 255, 255)
-bluewater = ( 25, 155, 225)
+# bluewater = ( 25, 155, 225)
+bluewater = ( 29, 108, 152)
 
 # Import classes
 sys.path.append("classes")
@@ -28,6 +29,17 @@ class Platform (pygame.sprite.Sprite):
     def update(self):
         self.rect.y += 1
 
+class Obstacle (pygame.sprite.Sprite):
+    def __init__(self, pos, image):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
+    def update(self):
+        self.rect.y += 1
 
 # Initialize pygame
 pygame.init() # Launch pygame
@@ -40,39 +52,31 @@ clock = pygame.time.Clock() # Initialize pygame clock
 
 # Create platforms
 def create_level1(block_list, slow_list, allsprites):
-   # left siv 
-    for y in range(-1200, 600, 600):
-        block = Platform(blue, 32, 600)
-        block.rect.x = 0
-        block.rect.y = y
-        slow_list.add(block)
-   # right siv
-    for y in range(-1200, 600, 600):
-        block = Platform(blue, 32, 600)
-        block.rect.x = screen_width - 32
-        block.rect.y = y
-        slow_list.add(block)
 
-    for x in range(-600, 1500, 200):
-        block = Platform(white, 100, 20)
-        block.rect.x = x
-        block.rect.y = -100
-        block_list.add(block)
+	for siv in range (-3000, 600, 64):
+		image = pygame.image.load(os.path.join("images", "siv.png"))
+		siv = (0,siv)
+		block = Obstacle(siv, image)
+		slow_list.add(block)
 
-    for x in range(-500, 1500, 300):
-        block = Platform(blue, 100, 20)
-        block.rect.x = x
-        block.rect.y = 0
-        slow_list.add(block)
- 
-    for x in range(-600, 1500, 200):
-        block = Platform(white, 100, 20)
-        block.rect.x = x
-        block.rect.y = 100
-        block_list.add(block)
+	for siv in range (-3000, 600, 64):
+		image = pygame.image.load(os.path.join("images", "siv.png"))
+		siv = (screen_width - 32,siv)
+		block = Obstacle(siv, image)
+		slow_list.add(block)
 
-    allsprites.add(block_list)
-    allsprites.add(slow_list)
+	for aakande in ([100,100], [300,100], [300, -200], [300, -400]):
+		image = pygame.image.load(os.path.join("images", "aakande.png"))
+		block = Obstacle(aakande, image)
+		slow_list.add(block)
+	
+	for rock in ([200,100], [300,150], [300, -250], [300, -450]):
+		image = pygame.image.load(os.path.join("images", "rock.png"))
+		block = Obstacle(rock, image)
+		block_list.add(block)
+
+	allsprites.add(block_list)
+	allsprites.add(slow_list)
  
  
 # Main program, create the blocks 
@@ -120,6 +124,10 @@ while run == True:
 	block_list.update()
 	slow_list.update()
 	player_list.update(player_list, block_list, slow_list)
+
+	duck1.playercollision(player_list)
+	duck2.playercollision(player_list)
+
 	duck1.detectsprint(player_list, block_list, slow_list)
 	duck2.detectsprint(player_list, block_list, slow_list)
 
