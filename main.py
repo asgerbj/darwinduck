@@ -120,7 +120,8 @@ while run == True:
 	block_list.update()
 	slow_list.update()
 	player_list.update(player_list, block_list, slow_list)
-	player_list.detectsprint(player_list, block_list, slow_list)
+	duck1.detectsprint(player_list, block_list, slow_list)
+	duck2.detectsprint(player_list, block_list, slow_list)
 
      
 	allsprites.draw(screen)

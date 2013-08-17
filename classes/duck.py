@@ -30,18 +30,21 @@ class duck(pygame.sprite.Sprite):
                    self.movementdir = 30
 
 	def detectsprint(self, player_list, block_list, slow_list):
-        if self.rect.y <= 50:
-            diff = 50 - self.rect.y
-            self.rect.y = 50
-            self.ypos = 50
+		if self.rect.y <= 50:
+			pygame.sprite.Sprite.remove(self, player_list)
+			diff = 50 - self.rect.y
+			self.rect.y = 50
+			self.ypos = 50
         # player2.rect.y += diff
-        for block in block_list:
-            block.rect.y += 3	
-        for block in slow_list:
-            block.rect.y += 3
-        for player in player_list:
-            player.rect.y += 3
-            player.ypos = player.rect.y
+			for block in block_list:
+				block.rect.y += 3	
+			for block in slow_list:
+				block.rect.y += 3
+			for player in player_list:
+				player.rect.y += 4
+				player.ypos = player.rect.y
+			
+			player_list.add(self)
 
 	def update(self, player_list, block_list, slow_list):
                 old_x = self.rect.x
