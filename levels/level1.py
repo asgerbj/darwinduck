@@ -37,21 +37,6 @@ class createlevel:
 			siv = (screen_width - 32,siv)
 			block = Obstacle(siv, image)
 			slow_list.add(block)
-	
-		for aakande in ([100,100], [300,100], [300, -200], [300, -400]):
-			image = pygame.image.load(os.path.join("images", "aakande.png"))
-			block = Obstacle(aakande, image)
-			slow_list.add(block)
-		
-		for rock in ([200,100], [300,150], [300, -250], [300, -450]):
-			image = pygame.image.load(os.path.join("images", "rock.png"))
-			block = Obstacle(rock, image)
-			block_list.add(block)
-			
-		for log in ([200,0], [300,50]):
-			image = pygame.image.load(os.path.join("images", "log.png"))
-			block = Obstacle(log, image)
-			block_list.add(block)
 
 		allsprites.add(block_list)
 		allsprites.add(slow_list)

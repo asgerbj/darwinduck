@@ -29,6 +29,7 @@ screen_width, screen_height = 500, 600
 screen=pygame.display.set_mode((screen_width, screen_height)) 
 pygame.mixer.init()
 clock = pygame.time.Clock() # Initialize pygame clock
+font = pygame.font.Font(None, 16) # Set font
   
 # Main program, create the blocks 
 player_list = pygame.sprite.Group()
@@ -38,7 +39,7 @@ allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
 
 # Create platforms
 sys.path.append("levels")
-from level1 import createlevel
+from level2 import createlevel
 createlevel(block_list, slow_list, allsprites, screen_width)
 
 duck1 = duck("rubberduck", volume,200,500)
@@ -87,6 +88,10 @@ while run == True:
      
 	allsprites.draw(screen)
 	# block_list.update()
+	
+	currentfps = int(clock.get_fps())
+	text_fps=font.render("fps: "+str(currentfps), True, white)
+	screen.blit(text_fps, (screen_width-50, 2))
 	
 	pygame.display.flip() # Redraw all graphics
 	clock.tick(30) # Run game at 30 fps
