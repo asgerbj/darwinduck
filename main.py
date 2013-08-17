@@ -6,6 +6,9 @@ from pygame.locals import *
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
+# Settings
+volume = 0.5 # Variable used to set volume level.
+
 # Colourcodes
 black = ( 0, 0, 0)
 blue  = ( 0, 255, 0)
@@ -47,7 +50,7 @@ pygame.mouse.set_visible(1)
 pygame.display.set_caption("Darwin Duck!") # Set title
 screen_width, screen_height = 500, 600
 screen=pygame.display.set_mode((screen_width, screen_height)) 
-
+pygame.mixer.init()
 clock = pygame.time.Clock() # Initialize pygame clock
 
 # Create platforms
@@ -87,9 +90,8 @@ allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
  
 create_level1(block_list, slow_list, allsprites)
 
-
-duck1 = duck("greenhead", white,200,500)
-duck2 = duck("redhead", white,300,500)
+duck1 = duck("greenhead", volume,200,500)
+duck2 = duck("redhead", volume,300,500)
 
 player_list.add(duck1)
 player_list.add(duck2)

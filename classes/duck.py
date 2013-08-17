@@ -3,7 +3,7 @@ import math
 import os
 
 class duck(pygame.sprite.Sprite):
-	def __init__(self, name, color,x,y):
+	def __init__(self, name, volume,x,y):
 		pygame.sprite.Sprite.__init__(self) 
 		self.name = name
 		self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "N.png"))
@@ -15,6 +15,9 @@ class duck(pygame.sprite.Sprite):
 		self.ypos = float(y)
 		self.movementdir = 0
 		self.movementspeed = 5
+		# Load sounds
+		self.sound_stone_hit = pygame.mixer.Sound(os.path.join('sound', 'stone_hit.wav'))
+		self.sound_stone_hit.set_volume(volume)
 
 	def right(self):
 		self.movementspeed += 1
@@ -129,7 +132,11 @@ class duck(pygame.sprite.Sprite):
                     self.xpos = old_x
                     self.ypos = old_y
                     self.movementspeed = 0
-
+                    if self.sound_last_collide == False:
+                       self.sound_stone_hit.play()
+                       self.sound_last_collide = True
+                else:
+                    self.sound_last_collide = False
                 
                 if self.rect.y >= 600 : # screen height
                    # diff = player1.rect.y - 500
