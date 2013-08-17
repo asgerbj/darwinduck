@@ -21,29 +21,6 @@ bluewater = ( 29, 108, 152)
 sys.path.append("classes")
 from duck import duck
 
-class Platform (pygame.sprite.Sprite):
-    def __init__(self, color, width, height):
-        pygame.sprite.Sprite.__init__(self)
- 
-        self.image = pygame.Surface([width, height])
-        self.image.fill(color)
- 
-        self.rect = self.image.get_rect()
-    def update(self):
-        self.rect.y += 1
-
-class Obstacle (pygame.sprite.Sprite):
-    def __init__(self, pos, image):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect = self.image.get_rect()
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
-
-    def update(self):
-        self.rect.y += 1
-
 # Initialize pygame
 pygame.init() # Launch pygame
 pygame.mouse.set_visible(1)
@@ -52,48 +29,17 @@ screen_width, screen_height = 500, 600
 screen=pygame.display.set_mode((screen_width, screen_height)) 
 pygame.mixer.init()
 clock = pygame.time.Clock() # Initialize pygame clock
-
-# Create platforms
-def create_level1(block_list, slow_list, allsprites):
-
-	for siv in range (-3000, 600, 64):
-		image = pygame.image.load(os.path.join("images", "siv.png"))
-		siv = (0,siv)
-		block = Obstacle(siv, image)
-		slow_list.add(block)
-
-	for siv in range (-3000, 600, 64):
-		image = pygame.image.load(os.path.join("images", "siv.png"))
-		siv = (screen_width - 32,siv)
-		block = Obstacle(siv, image)
-		slow_list.add(block)
-
-	for aakande in ([100,100], [300,100], [300, -200], [300, -400]):
-		image = pygame.image.load(os.path.join("images", "aakande.png"))
-		block = Obstacle(aakande, image)
-		slow_list.add(block)
-	
-	for rock in ([200,100], [300,150], [300, -250], [300, -450]):
-		image = pygame.image.load(os.path.join("images", "rock.png"))
-		block = Obstacle(rock, image)
-		block_list.add(block)
-		
-	for log in ([200,0], [300,50]):
-		image = pygame.image.load(os.path.join("images", "log.png"))
-		block = Obstacle(log, image)
-		block_list.add(block)
-
-	allsprites.add(block_list)
-	allsprites.add(slow_list)
- 
- 
+  
 # Main program, create the blocks 
 player_list = pygame.sprite.Group()
 block_list = pygame.sprite.Group()
 slow_list = pygame.sprite.Group()
 allsprites = pygame.sprite.OrderedUpdates() # Create group for all sprites
- 
-create_level1(block_list, slow_list, allsprites)
+
+# Create platforms
+sys.path.append("levels")
+from level1 import createlevel
+createlevel(block_list, slow_list, allsprites, screen_width)
 
 duck1 = duck("rubberduck", volume,200,500)
 duck2 = duck("redhead", volume,300,500)
