@@ -56,18 +56,68 @@ class duck(pygame.sprite.Sprite):
 		#     self.ypos = old_y
 		
 		player_collision = pygame.sprite.spritecollide(self, player_list, False)
+		speedvar = self.movementspeed
+		dirvar = self.movementdir
 		for player_collide in player_collision:
-			# if player_collide.rect.x < self.rect.x:
-			# 	self.movementdir = player_collide.movementdir
-			# 	self.movementspeed = player_collide.movementspeed * 0.5
-			# 	player_collide.movementspeed *= -0.3
 
-			if self.rect.x < player_collide.rect.x or player_collide.rect.x < self.rect.x:
-				# player_collide.movementdir = self.movementdir
-				speedvar = self.movementspeed
-				self.movementspeed -= player_collide.movementspeed * 0.1
-				player_collide.movementspeed -= speedvar * 0.1
+			# self.movementspeed = player_collide.movementspeed
+			# player_collide.movementspeed = 10
 
+			# self.movementdir = player_collide.movementdir
+			# player_collide.movementdir = dirvar
+
+
+			# if self.rect.x < player_collide.rect.x or player_collide.rect.x < self.rect.x:
+				# speedvar = self.movementspeed
+				# duckspeed = 0.5	
+				# if self.movementspeed > player_collide.movementspeed:
+				# 	player_collide.movementdir = self.movementdir
+				# 	self.movementspeed -= player_collide.movementspeed * 3
+				# 	player_collide.movementspeed = speedvar * duckspeed
+				# else: 
+				# 	self.movementdir = player_collide.movementdir 
+				# 	self.movementspeed = player_collide.movementspeed * duckspeed
+				# 	player_collide.movementspeed -= speedvar * 3
+			xtra = self.rect.x - player_collide.rect.x
+			ytra = self.rect.y - player_collide.rect.y
+			if ytra > 22*3/4 and xtra < ytra:
+				print "top" + self.name
+				player_collide.movementdir =  self.movementdir 
+				player_collide.movementspeed += self.movementspeed * 0.5
+				self.movementspeed *= -0.3
+			elif xtra > 30*3/4  and ytra < xtra:
+				print "left" + self.name # hit on left
+				self.movementdir = player_collide.movementdir
+				self.movementspeed += player_collide.movementspeed * 0.5
+				player_collide.movementspeed *= -0.3
+			elif xtra < -30*3/4 and ytra > xtra:
+				print "right" + self.name
+				self.movementdir = player_collide.movementdir
+				self.movementspeed += player_collide.movementspeed * 0.5
+				player_collide.movementspeed *= -0.3
+			elif ytra < -22*3/4 :
+				print "bot" + self.name
+				self.movementdir = player_collide.movementdir
+				self.movementspeed += player_collide.movementspeed * 0.5
+				player_collide.movementspeed *= -0.3
+			else:
+				print "den burde ikke gaa herind "
+				print "xtra: " + str(xtra)
+				print "ytra: " + str(ytra)
+
+
+
+			# if player_collide.rect.y > self.rect.y:
+				# self.movementdir = player_collide.movementdir
+				# self.movementspeed += player_collide.movementspeed * 0.5
+				# player_collide.movementspeed *= -0.3
+
+			# if player_collide.rect.y < self.rect.y:
+				# player_collide.movementdir =  self.movementdir 
+				# player_collide.movementspeed += self.movementspeed * 0.5
+				# self.movementspeed *= -0.3
+
+# VIRKER I Y
 			# if player_collide.rect.y > self.rect.y:
 			# 	self.movementdir = player_collide.movementdir
 			# 	self.movementspeed += player_collide.movementspeed * 0.5
