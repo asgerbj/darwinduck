@@ -77,6 +77,11 @@ def create_level1(block_list, slow_list, allsprites):
 		image = pygame.image.load(os.path.join("images", "rock.png"))
 		block = Obstacle(rock, image)
 		block_list.add(block)
+		
+	for log in ([200,0], [300,50]):
+		image = pygame.image.load(os.path.join("images", "log.png"))
+		block = Obstacle(log, image)
+		block_list.add(block)
 
 	allsprites.add(block_list)
 	allsprites.add(slow_list)
