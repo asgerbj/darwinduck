@@ -50,6 +50,8 @@ player_list.add(duck2)
 allsprites.add(player_list)
 
 run = True
+collision_true = False
+collision_true_counter = 0
 # - - - BEGIN MAIN LOOP - - -
 while run == True:
 	# Events
@@ -79,8 +81,14 @@ while run == True:
 	slow_list.update()
 	player_list.update(player_list, block_list, slow_list)
 
-	duck1.playercollision(player_list)
-	duck2.playercollision(player_list)
+	if collision_true_counter < 1 :
+		collision_true = duck1.playercollision(player_list)
+		collision_true = duck2.playercollision(player_list)
+	if collision_true:
+		collision_true_counter += 1
+		if collision_true_counter == 20:
+		   collision_true_counter = 0
+		   collision_true = False
 
 	duck1.detectsprint(player_list, block_list, slow_list)
 	duck2.detectsprint(player_list, block_list, slow_list)
