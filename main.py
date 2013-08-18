@@ -7,7 +7,7 @@ if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
 # Settings
-volume = 0.5 # Variable used to set volume level.
+volume = 0.0 # Variable used to set volume level.
 
 # Colourcodes
 black = ( 0, 0, 0)
@@ -25,7 +25,7 @@ from duck import duck
 pygame.init() # Launch pygame
 pygame.mouse.set_visible(1)
 pygame.display.set_caption("Darwin Duck!") # Set title
-screen_width, screen_height = 500, 600
+screen_width, screen_height = 480, 600
 screen=pygame.display.set_mode((screen_width, screen_height)) 
 pygame.mixer.init()
 clock = pygame.time.Clock() # Initialize pygame clock
