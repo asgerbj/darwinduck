@@ -7,7 +7,7 @@ if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
 # Settings
-volume = 0.0 # Variable used to set volume level.
+volume = 1 # Variable used to set volume level.
 
 # Colourcodes
 black = ( 0, 0, 0)
