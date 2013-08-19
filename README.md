@@ -1,5 +1,5 @@
-   DARWINDUCK
-   ==========
+DARWINDUCK
+==========
 
 Work in progress
 
