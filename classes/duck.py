@@ -19,7 +19,7 @@ class duck(pygame.sprite.Sprite):
         self.lookdir = 0
         self.movementdir = 0
         self.movementspeed = 5
-        self.maxspeed = 5
+        self.maxspeed = 10
 
         # Load sounds
         self.sound_stone_hit = pygame.mixer.Sound(os.path.join('sound', 'stone_hit.wav'))
@@ -37,8 +37,11 @@ class duck(pygame.sprite.Sprite):
             self.movementspeed = -self.maxspeed
 
         self.lookdir -= 30
-        # self.movementdir -= 30
-        self.movementdir = self.lookdir
+        if abs(self.movementdir - self.lookdir) > 90 and self.movementspeed > 1:
+            self.movementspeed -=2
+        else:
+            self.movementdir = self.lookdir
+
 
         if self.lookdir < 0:
             self.lookdir = 360 + self.lookdir
@@ -53,8 +56,10 @@ class duck(pygame.sprite.Sprite):
             self.movementspeed = -self.maxspeed
 
         self.lookdir += 30
-        # self.movementdir += 30
-        self.movementdir = self.lookdir
+        if abs(self.movementdir - self.lookdir) > 90 and self.movementspeed > 1:
+            self.movementspeed -= 2
+        else:
+            self.movementdir = self.lookdir
 
         if self.lookdir > 360:
             self.lookdir = self.lookdir - 360
@@ -62,14 +67,13 @@ class duck(pygame.sprite.Sprite):
             self.movementdir = self.movementdir - 360
 
     def playercollision(self, player_list):
+        collision = False
         pygame.sprite.Sprite.remove(self, player_list)
-
         player_collision = pygame.sprite.spritecollide(self, player_list, False)
-        collision_true = False
 
-        multiplier = 1
+        bounce_multiplier = 1.5
         for player_collide in player_collision:
-            collision_true = True
+            collision = True
             self.rect.x = self.old_x
             self.rect.y = self.old_y
             self.xpos   = self.old_x
@@ -81,7 +85,7 @@ class duck(pygame.sprite.Sprite):
 
             if self.movementspeed > player_collide.movementspeed:
                 # constant to multiple the affect to push away ducks, avoid getting stuck in eachother
-                self.movementspeed -= (self.movementspeed - player_collide.movementspeed) * multiplier
+                self.movementspeed -= (self.movementspeed - player_collide.movementspeed) * bounce_multiplier
                 # player_collide.movementdir   += self.movementdir
                 # tmp1 = abs(abs(player_collide.movementspeed) - abs(self.movementspeed))/max(abs(player_collide.movementspeed), abs(self.movementspeed))
                 player_collide.movementdir = self.movementdir
@@ -90,7 +94,7 @@ class duck(pygame.sprite.Sprite):
                 # Switch self and player
                 player_collide.movementspeed -= (player_collide.movementspeed - self.movementspeed) * 1.5
                 self.movementdir = player_collide.movementdir
-                self.movementspeed += (self.movementspeed - player_collide.movementspeed) * multiplier
+                self.movementspeed += (self.movementspeed - player_collide.movementspeed) * bounce_multiplier
 
             # speed cap
             if self.movementspeed > self.maxspeed:
@@ -102,26 +106,47 @@ class duck(pygame.sprite.Sprite):
             elif player_collide.movementspeed < -player_collide.maxspeed:
                 player_collide.movementspeed = -player_collide.maxspeed
         player_list.add(self)
-        return collision_true 
+        return collision
 
     def update(self, player_list, block_list, slow_list):
+        collision = True # To enter at the first time
         old_x = self.rect.x
         old_y = self.rect.y
         self.old_x = old_x
         self.old_y = old_y
 
-        self.ypos -= self.movementspeed * math.cos(self.movementdir * math.pi / 180)
-        self.rect.y = int(self.ypos)
-        self.xpos -= self.movementspeed * math.sin(self.movementdir * math.pi / 180) 
-        self.rect.x = int(self.xpos)
+        while collision is True:
+            self.ypos -= self.movementspeed * math.cos(self.movementdir * math.pi / 180)
+            self.rect.y = int(self.ypos)
 
-        slowed = pygame.sprite.spritecollide (self, slow_list, False)
-        for i in slowed:
-            self.movementspeed = self.movementspeed * 0.9 # Controls slow effect
+            self.xpos -= self.movementspeed * math.sin(self.movementdir * math.pi / 180) 
+            self.rect.x = int(self.xpos)
 
-        self.movementspeed =  self.movementspeed * 0.95
+            slowed = pygame.sprite.spritecollide (self, slow_list, False)
+            for i in slowed:
+                self.movementspeed *= 0.9 # Controls slow effect
+            self.movementspeed *= 0.95
+
+            player_collision = self.playercollision(player_list)
+
+            block_collision = pygame.sprite.spritecollide (self, block_list, False)
+            if block_collision:
+                # We collided, go back to the old pre-collision location
+                self.rect.x = old_x
+                self.rect.y = old_y
+                self.xpos = old_x
+                self.ypos = old_y
+                self.movementspeed = 0
+                if self.sound_last_collide == False:
+                    self.sound_stone_hit.play()
+                    self.sound_last_collide = True
+            else:
+                self.sound_last_collide = False
+
+            collision = player_collision or block_collision
+
+
         angle = 360 / 8 / 2
-
         if self.lookdir >= 360-angle or self.lookdir <= angle :
             self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "N.png"))
         elif self.lookdir >= 360 - 3 * angle :
@@ -138,20 +163,6 @@ class duck(pygame.sprite.Sprite):
             self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "W.png"))
         elif self.lookdir >= 360 - 15 * angle:
             self.image = pygame.image.load(os.path.join("images/%s/"%self.name, "NW.png"))
-
-        collide = pygame.sprite.spritecollide (self, block_list, False)
-        if collide:
-            # We collided, go back to the old pre-collision location
-            self.rect.x = old_x
-            self.rect.y = old_y
-            self.xpos = old_x
-            self.ypos = old_y
-            self.movementspeed = 0
-            if self.sound_last_collide == False:
-                self.sound_stone_hit.play()
-                self.sound_last_collide = True
-        else:
-            self.sound_last_collide = False
 
         if self.rect.y >= 600 : # screen height
             # diff = player1.rect.y - 500
@@ -175,20 +186,3 @@ class duck(pygame.sprite.Sprite):
 
         if self.rect.y > 600:
             self.kill()
-
-    def detectsprint(self, player_list, block_list, slow_list):
-        if self.rect.y <= 50:
-            pygame.sprite.Sprite.remove(self, player_list)
-            diff = 50 - self.rect.y
-            self.rect.y = 50
-            self.ypos = 50
-
-            for block in block_list:
-                block.rect.y += 3	
-            for block in slow_list:
-                block.rect.y += 3
-            for player in player_list:
-                player.rect.y += 4
-                player.ypos = player.rect.y
-            player_list.add(self)
-

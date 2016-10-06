@@ -45,14 +45,43 @@ createlevel(block_list, slow_list, allsprites, screen_width)
 
 duck1 = duck("redhead"   , volume, 200, 500)
 duck2 = duck("rubberduck", volume, 300, 500)
+duck3 = duck("greenhead" , volume, 100, 500)
+# duck4 = duck("devilduck" , volume, 400, 500)
 
 player_list.add(duck1)
 player_list.add(duck2)
+player_list.add(duck3)
 allsprites.add(player_list)
+
+
+def sprint(last_sprint, player_list, block_list, slow_list):
+    if last_sprint > 0:
+        for block in block_list:
+            block.rect.y += 3	
+        for block in slow_list:
+            block.rect.y += 3
+        for player in player_list:
+            player.rect.y += 3
+            player.ypos = player.rect.y
+    else:
+        for player in player_list:
+            if player.rect.y <= 50:
+                for block in block_list:
+                    block.rect.y += 3	
+                for block in slow_list:
+                    block.rect.y += 3
+                for player in player_list:
+                    player.rect.y += 3
+                    player.ypos = player.rect.y
+                return True
+    return False
+
+
 
 run = True
 collision_true = False
 collision_true_counter = 0
+last_sprint = 0
 # - - - BEGIN MAIN LOOP - - -
 while run == True:
     # Events
@@ -73,6 +102,12 @@ while run == True:
             if event.key == pygame.K_LEFT:
                 duck2.left()
 
+            if event.key == pygame.K_l:
+                duck3.right()
+            if event.key == pygame.K_j:
+                duck3.left()
+
+
     # Draw graphics
     screen.fill(bluewater) # Draw background
 
@@ -80,24 +115,14 @@ while run == True:
     slow_list.update()
     player_list.update(player_list, block_list, slow_list)
 
-    collision_true = duck1.playercollision(player_list)
-    # collision_true = duck2.playercollision(player_list)
+    print "\rredhead:{0:.2f}   rubberduck:{1:.2f}".format(duck1.movementspeed, duck2.movementspeed),
+    sys.stdout.flush()
 
-    # max_collisions = 2
-    # if collision_true_counter < 1 :
-    # 	collision_true = duck1.playercollision(player_list)
-    # 	# collision_true = duck2.playercollision(player_list)
-    # if collision_true:
-    # 	collision_true_counter += 1
-    # 	if collision_true_counter == 2:
-    # 	   collision_true_counter = 0
-    # 	   collision_true = False
-
-
-
-    # duck1.detectsprint(player_list, block_list, slow_list)
-    # duck2.detectsprint(player_list, block_list, slow_list)
-
+    # if last_sprint <= 0:
+    #     if sprint(last_sprint, player_list, block_list, slow_list):
+    #         last_sprint = 30*10
+    # else:
+    #     last_sprint -= 1
 
     allsprites.draw(screen)
     # block_list.update()
